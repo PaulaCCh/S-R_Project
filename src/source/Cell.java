@@ -14,7 +14,7 @@ package source;
 import java.util.HashSet;
 
 
-public class Element {
+public class Cell {
 
 
 	private HashSet<Integer> activeConnections;
@@ -22,7 +22,7 @@ public class Element {
 	/**
 	 * Constructor of the class Element
 	 */
-	public Element() {
+	public Cell() {
 		
 		activeConnections = new HashSet<Integer>();
 		
@@ -90,9 +90,9 @@ public class Element {
 	 * items as the current element
 	 * @return 	and new Element object which is the copy of the current element.
 	 */
-	public Element clone() {
+	public Cell clone() {
 		
-		Element elem = new Element();
+		Cell elem = new Cell();
 		
 		for(Integer i: activeConnections) {
 			

@@ -1,10 +1,8 @@
 /**
  * 
- * The class PaullMatrix is the main part of the program and it contains all
- * the logic behind the PaullMatrix, it includes the algorithm for adding 
- * a new connection, quit a connection, rearrange the matrix.
+ * The PaullMatrix class contains all the logic of the program. 
  *
- * @author Maretti, Elnor, Huamani
+ * @author De Silva, Pébrier, Caballero 
  *
  */
 
@@ -19,7 +17,7 @@ import java.util.Random;
 
 public class PaullMatrix {
 
-	private Hashtable<Key, Element> paullMatrix = new Hashtable<Key, Element>();
+	private Hashtable<Key, Cell> paullMatrix = new Hashtable<Key, Cell>();
 
 	private int r1;
 	private int r2;
@@ -46,7 +44,7 @@ public class PaullMatrix {
 			for (int j = 1; j <= param.getNumStage3Matrices(); j++) {
 
 				Key id = new Key(i, j);
-				Element elem = new Element();
+				Cell elem = new Cell();
 
 				paullMatrix.put(id, elem);
 
@@ -98,7 +96,7 @@ public class PaullMatrix {
 
 				Key k = new Key(row, i); //key made by row of new connection and column i
 
-				Element el = paullMatrix.get(k); //extracts the element(s) contained in this cell (row,i)
+				Cell el = paullMatrix.get(k); //extracts the element(s) contained in this cell (row,i)
 
 				if (el.contains(j)) {
 
@@ -123,7 +121,7 @@ public class PaullMatrix {
 
 				Key k = new Key(i, column);
 
-				Element el = paullMatrix.get(k);
+				Cell el = paullMatrix.get(k);
 
 				if (el.contains(j)) {
 
@@ -153,7 +151,7 @@ public class PaullMatrix {
 				symbol = i;
 				break;
 			}
-			Element elem = paullMatrix.get(k);
+			Cell elem = paullMatrix.get(k);
 			elem.insert(symbol);
 			return true;
 		}
@@ -216,10 +214,10 @@ public class PaullMatrix {
 			int numRearrangementRow;
 			int numRearrangementColumn;
 
-			Hashtable<Key, Element> rowMatrix;
-			Hashtable<Key, Element> columnMatrix;
+			Hashtable<Key, Cell> rowMatrix;
+			Hashtable<Key, Cell> columnMatrix;
 			
-			Hashtable<Key, Element> best = null;
+			Hashtable<Key, Cell> best = null;
 			
 			switch (policy) {
 
@@ -358,7 +356,7 @@ public class PaullMatrix {
 
 	public int reArrange(int rowOrColumn, int index, int symbolToLookFor,
 			int symbolToAdd, int numRearrangements,
-			Hashtable<Key, Element> paullMatrix, Key avoid) {
+			Hashtable<Key, Cell> paullMatrix, Key avoid) {
 
 		int nextRowOrColumn;
 		int nextIndex;
@@ -392,12 +390,12 @@ public class PaullMatrix {
 
 			if (numRearrangements == 0 && k.hashCode() == avoid.hashCode()) { // avoid:chiave ottenuta da (row, column) di partenza (nuova connessione)
 
-				Element elem = paullMatrix.get(k);
+				Cell elem = paullMatrix.get(k);
 				elem.insert(symbolToLookFor);
 			}
 
 			if (k.hashCode() != avoid.hashCode()) {
-				Element elem = paullMatrix.get(k);
+				Cell elem = paullMatrix.get(k);
 
 				if (elem.contains(symbolToLookFor)) {
 
@@ -523,16 +521,16 @@ public class PaullMatrix {
 	 * @return a Hashtable, exact copy element by element of the current Hashtable
 	 * 
 	 */
-	public Hashtable<Key, Element> duplicateHashTable() {
+	public Hashtable<Key, Cell> duplicateHashTable() {
 
-		Hashtable<Key, Element> paullMatrix = new Hashtable<Key, Element>();
+		Hashtable<Key, Cell> paullMatrix = new Hashtable<Key, Cell>();
 
 		for (int i = 1; i <= r1; i++) {
 
 			for (int j = 1; j <= r3; j++) {
 
 				Key id = new Key(i, j);
-				Element elem = this.paullMatrix.get(id).clone();
+				Cell elem = this.paullMatrix.get(id).clone();
 
 				paullMatrix.put(id, elem);
 
@@ -551,7 +549,7 @@ public class PaullMatrix {
 	public void setConnection(int row, int column, int symbol) {
 
 		Key k = new Key(row, column);
-		Element elem = paullMatrix.get(k);
+		Cell elem = paullMatrix.get(k);
 		elem.insert(symbol);
 
 	}
