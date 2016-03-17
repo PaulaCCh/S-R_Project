@@ -1,6 +1,7 @@
 /**
  * 
- * The PaullMatrix class contains all the logic of the program. 
+ * The PaullMatrix class contains all the logic of the program, it includes two main methods to 
+ * rearrange the matrix and add a new connection in the network.
  *
  * @author De Silva, Pébrier, Caballero 
  *
@@ -33,15 +34,14 @@ public class PaullMatrix {
 	/**
 	 * Constructor of the class PaullMatrix
 	 * 
-	 * @param object
-	 *            of the class Simulation Data containing the specifics for this
-	 *            simulation (number of matrices for each stage)
+	 * @param Slepian-Duguid network parameters
 	 */
+	
 	public PaullMatrix(SimulationData param) {
 
-		for (int i = 1; i <= param.getNumStage1Matrices(); i++) {
+		for (int i = 1; i <= param.getR1(); i++) {
 
-			for (int j = 1; j <= param.getNumStage3Matrices(); j++) {
+			for (int j = 1; j <= param.getR3(); j++) {
 
 				Key id = new Key(i, j);
 				Cell elem = new Cell();
@@ -52,13 +52,13 @@ public class PaullMatrix {
 
 		}
 
-		this.r1 = param.getNumStage1Matrices();
-		this.r2 = param.getNumStage2Matrices();
-		this.r3 = param.getNumStage3Matrices();
+		this.r1 = param.getR1();
+		this.r2 = param.getR2();
+		this.r3 = param.getR3();
 
 		this.maxSymbolsRow = Math.min(param.getNumInletsFirstStage(),
-				param.getNumStage2Matrices());
-		this.maxSymbolsColumn = Math.min(param.getNumStage2Matrices(),
+				param.getR2());
+		this.maxSymbolsColumn = Math.min(param.getR2(),
 				param.getNumOutletsThirdsStage());
 
 		numRearrangements = new ArrayList<Integer>();
@@ -478,8 +478,7 @@ public class PaullMatrix {
 		for (int i = 0; i < r1; i++) {
 			for (int j = 0; j < r3; j++) {
 				line[i] = new String("");
-				String newLine = paullMatrix.get(new Key(i + 1, j + 1))
-						.toString();
+				String newLine = paullMatrix.get(new Key(i + 1, j + 1)).toString();
 
 				if (newLine.length() > longest) {
 					longest = newLine.length(); //trova la lunghezza dell'elemento più lungo nella paullMatrix

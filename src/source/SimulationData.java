@@ -1,11 +1,10 @@
 /**
  * 
- * The class SimulationData data contains all the data used to run the simulation.
- * This includes the number of first, second and third stage matrices, the number of
- * inlets of matrices in the first and thirds stage and the total number of inlets
- * and outlets. All method are getters and setters so they are not commented.
+ * The SimulationData class contains all the parameters of the Slepian-Duguid network such that 
+ * the number of first/second/third stage matrices, the number of inlets and outlets of each matrix.
+ * It specifies also the policy that the rearrangement method has to follow.
  *
- * @author Maretti, Elnor, Huamani
+ * @authorDe Silva, Pébrier, Caballero 
  *
  */
 
@@ -78,61 +77,22 @@ public class SimulationData {
 		
 	}
 	
-	public void setNumStage1Matrices(int r1) {
-		
-		this.r1=r1;
-		
-	}
+
 	
-	public void setNumStage2Matrices(int r2) {
-		
-		this.r2=r2;
-		
-	}
-	
-	public void setNumStage3Matrices(int r3) {
-		
-		this.r3=r3;
-		
-	}
-	
-	public void setNumInletsFirstStage(int n) {
-		
-		this.n = n;
-		
-	}
-	
-	public void setNumOutletsThirdStage(int m) {
-		
-		this.m = m;
-		
-	}
-	
-	public void setNumTotalInlets(int N) {
-		
-		this.N=N;
-	}
-	
-	public void setNumTotalOutlets(int M) {
-		
-		this.M=M;
-		
-	}
-	
-	public int getNumStage1Matrices() {
+	public int getR1() {
 		
 		return r1;
 		
 	}
 	
-	public int getNumStage2Matrices() {
+	public int getR2() {
 		
 		return r2;
 		
 	}
 	
 	
-	public int getNumStage3Matrices() {
+	public int getR3() {
 		
 		return r3;
 		

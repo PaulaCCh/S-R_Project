@@ -160,7 +160,7 @@ public class Controller {
 					}
 					double averageRearrangements=getAverageNumRearrangements();//calcola la media di riarrangiamenti su tutte le simulazioni
 					double averageExecutionTime=getAverageExecutionTime();
-					String result=("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+"\n Average number of rearrangements: "+averageRearrangements+". Average execution time "+averageExecutionTime+"[ms]");
+					String result=("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+"\nAverage number of rearrangements: "+averageRearrangements+". Average execution time "+averageExecutionTime+"[ms]");
 					//averagesWriter.println("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy());
 					//averagesWriter.println("Average number of rearrangements: "+averageRearrangements+". Average execution time "+averageExecutionTime+"[ms]");
 					graphicalInt.setResultMessage(result);

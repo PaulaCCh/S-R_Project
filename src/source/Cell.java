@@ -1,11 +1,10 @@
 /**
  * 
- * The class Element is used to represent the single element (row/column)
- * of the Paull matrix. An object of the class element contains a HashSet
- * which is the list of the active connections/symbols active in that 
- * element.
+ * The Cell class represents the single entry of the PaullMatrix. 
+ * Each cell contains an hashset of integers representing the matrices through which we establish a connection
+ * between a first stage matrix and a third stage one.  
  *
- * @author Maretti, Elnor, Huamani
+ * @author De Silva, Pébrier, Caballero 
  *
  */
 
@@ -31,11 +30,10 @@ public class Cell {
 	
 	
 	/**
-	 * This method looks for the element c in the hashset and returns a boolean
-	 * value on whether the element is contained or not in the set.
-	 *
-	 * @param  	symbol to look for in the set
-	 * @return 	true if the symbols is found in the set, false otherwise
+	 * 
+	 * This method checks if a value is contained in the cell. 
+	 * @param  	symbol to look for in the cell
+	 * @return 	true if the symbols is found in the cell, false otherwise
 	 */
 	public boolean contains(int c) {
 		
@@ -44,7 +42,7 @@ public class Cell {
 	}
 	
 	/**
-	 * This method inserts a new symbol in the set, if the symbol it is not already present.
+	 * This method inserts a new symbol in the cell, if the symbol it is not already present.
 	 * 
 	 * @param  	symbol to be inserted
 	 * @return 	true if the symbols is inserted correctly, false is the element is already in
@@ -63,32 +61,21 @@ public class Cell {
 	}
 	
 	
-	public void remove(int c) {
-		
-		if(activeConnections.contains(c)) {
-			
-			activeConnections.remove(c);
-		}
-		
-	}
-	
 	/**
-	 * This method returns the symbols contained in the set as a string for representation
-	 * purposes
-	 * @return 	a string representing the elements in the set
+	 * 
+	 * This method gives a string representation of the symbols contained. 
+	 * @return 	a string representing the elements in the cell.
 	 */
 	public String toString() {
 		
-		return activeConnections.toString();
-		
+		return activeConnections.toString();	
 		
 	}
 	
 	
 	/**
-	 * This method clones an element by creating a new disjoint element with the same
-	 * items as the current element
-	 * @return 	and new Element object which is the copy of the current element.
+	 * This method creates a copy of the cell containing the same elements. 
+	 * @return the cloned cell
 	 */
 	public Cell clone() {
 		
@@ -100,6 +87,22 @@ public class Cell {
 			
 		}
 		return elem;
+		
+	}
+	
+
+	/**
+	 * This method remove the given symbol if it is contained in the cell.
+	 * 
+	 * @param  	symbol to be deleted
+	 * 		
+	 */
+	public void remove(int c) {
+		
+		if(activeConnections.contains(c)) {
+			
+			activeConnections.remove(c);
+		}
 		
 	}
 	

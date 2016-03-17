@@ -1,11 +1,11 @@
 /**
  * 
- * The class Key indicates the key used to indicize elements in the HashMap
- * of the class PaullMatrix. A key is composed by the index of the first stage
- * matrix and the index of the third stage matrix which correspond respectively
- * to the row and the column index of the Paull Matrix.
+ *The class Key is used to access to the hashset representing the PaullMatrix. 
+ *The object key contains two integers that represent the first stage index (row index in the Paull Matrix) 
+ *and the third stage index (column index of the Paull Matrix).
+ *Each index indicates a matrix in the first and third stage of the Slepian-Duguid network.
  *
- * @author Maretti, Elnor, Huamani
+ * @author De Silva, Pébrier, Caballero 
  *
  */
 
@@ -13,32 +13,46 @@ package source;
 
 public class Key {
 
-	private int firstStageIndex;
-	private int thirdStageIndex;
+	private int r1Index;
+	private int r3Index;
 	
 	/**
-	 * Constructor of the class Key
-	 * 
-	 * @param 	index of the first and last stage matrix corresponding to the index
-	 * 			of the row and column of the Paull matrix
-	 * 
+	 * Constructor
 	 */
-	public Key(int firstStageIndex, int thirdStageIndex) {
+	public Key(int r1Index, int r3Index) {
+	
 		
-		this.firstStageIndex=firstStageIndex;
-		this.thirdStageIndex=thirdStageIndex;
+		this.r1Index=r1Index;
+		this.r3Index=r3Index;
 		
 	}
 	
+
+	
+	
 	/**
-	 * Implementation of the equals needed to manage the hashtable
+	 * Calculate the hashcode of the key. This method is used to compare keys with the same coordinates
+	 * (but that are different object). 
+	 * 
+	 * @return the ingeger representation of the key. 
+	 */
+	public int hashCode() {
+        
+		String first = Integer.toString(r1Index)+Integer.toString(r3Index);
+		
+		int hash = 1+first.hashCode()+Integer.toString(r1Index).hashCode();
+        hash = hash * 17 + (r1Index+r3Index)^2/(r1Index+1);
+        return hash;
+    }
+	
+	/**
+	 * Method that check if 
 	 * 
 	 * @param object to be compared
 	 * @return true if the object k is equal to the current object, otherwise false
 	 */
+	
 	public boolean equals(Object k) {
-
-		
 		
 		if(k.hashCode()==this.hashCode()) {
 			
@@ -48,20 +62,5 @@ public class Key {
 		return false;
 		
 	}
-	
-	/**
-	 * Implementation of the hashcode in order to manage the hashtable
-	 * 
-	 * @return an integer which is the hash representation of the current object
-	 */
-	public int hashCode() {
-        
-		String first = Integer.toString(firstStageIndex)+Integer.toString(thirdStageIndex);
-		
-		int hash = 1+first.hashCode()+Integer.toString(firstStageIndex).hashCode();
-        hash = hash * 17 + (firstStageIndex+thirdStageIndex)^2/(firstStageIndex+1);
-        return hash;
-    }
-	
 	
 }
