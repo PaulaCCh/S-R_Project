@@ -101,7 +101,7 @@ public class Controller {
 					simulationTimes = new ArrayList<Double>();
 					double startTime; 
 					double finishTime; 
-					String output=new String("");  //TODO
+					String output=new String("");  //TODO paula
 
 					int counterSim=1; 
 					while (counterSim<=iterations){
