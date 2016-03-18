@@ -1,8 +1,10 @@
 package source;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -11,9 +13,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class NewGraphicalInterface {
+public class GraphicalInterface {
 	
-	private static NewGraphicalInterface instance; 
+	private static GraphicalInterface instance; 
 	private JFrame frame=new JFrame ("Slepian-Duguid Simulator "); 
 	private JLabel r1Label=new JLabel ("Number of matrices in the first stage"); 
 	private JLabel r2Label=new JLabel ("Number of matrices in the second stage"); 
@@ -22,6 +24,9 @@ public class NewGraphicalInterface {
 	private JLabel mLabel=new JLabel ("Number of outlet of each matrix"); 
 	private JLabel policyLabel=new JLabel ("Select policy");
 	private JLabel iterationsLabel=new JLabel("Insert the number of simulation");
+	private JLabel bg=new JLabel (new ImageIcon("images/background.jpg"));
+	private JLabel title=new JLabel("SLEPIAN-DUGUID"); 
+	private JLabel subTitle=new JLabel("SIMULATOR");
 	private JTextField r1Field=new JTextField(5); 
 	private JTextField r2Field=new JTextField (5); 
 	private JTextField r3Field=new JTextField (5); 
@@ -32,50 +37,73 @@ public class NewGraphicalInterface {
 	@SuppressWarnings("rawtypes")
 	private JComboBox policyBox=new JComboBox<String>(); 
 	private JOptionPane messagePopUp=new JOptionPane();
-	private JButton startButton=new JButton ("Start Simulation");
+	private JButton startButton=new JButton (new ImageIcon("images/runButton.png"));
 	
-	public static NewGraphicalInterface getInstance() {
+	public static GraphicalInterface getInstance() {
 		if (instance==null)
-			instance=new NewGraphicalInterface();
+			instance=new GraphicalInterface();
 
 		return instance; 
 	}
 	
 	@SuppressWarnings("unchecked")
-	public NewGraphicalInterface(){
+	public GraphicalInterface(){
 	
 		frame.setResizable(false);
-		frame.setBounds(100,100,780,727);
+		frame.setBounds(100,100,780,585);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		
-		//TODO BACKGROUND
+		bg.setBounds(0, 0, 780, 585);
 		
-		r1Label.setBounds(10,50,255,14);
-		r1Field.setBounds( 310, 47, 42, 20);
+		title.setBounds(470, 20, 300, 30);
+		title.setFont(new Font("HELVETICA", Font.ITALIC, 25));
+		title.setForeground(Color.WHITE);
 		
+		subTitle.setBounds(500,50,150,30);
+		subTitle.setFont(new Font("HELVETICA", Font.ITALIC, 25));
+		subTitle.setForeground(Color.WHITE);
 		
-		r2Label.setBounds(10,100,255,14);
-		r2Field.setBounds(310, 97, 42, 20);
-		
-		
-		r3Label.setBounds(10,150,255,14);
-		r3Field.setBounds(310, 147, 42, 20);
-		
-		
-		nLabel.setBounds(10,200 ,255,14);
-		nField.setBounds(310, 197, 42, 20); 
-		
-		
-		mLabel.setBounds(10,250,255,14);
-		mField.setBounds(310, 247, 42, 20);
+		r1Label.setBounds(10,50,275,14);
+		r1Label.setForeground(Color.WHITE);
+		r1Label.setFont(new Font("HELVETICA", Font.BOLD, 15));
+		r1Field.setBounds( 330, 47, 42, 20);
+	
 		
 		
-		iterationsLabel.setBounds(10, 300, 255, 14);
-		iterationsField.setBounds(310, 297, 42, 20);
+		r2Label.setBounds(10,100,285,14);
+		r2Field.setBounds(330, 97, 42, 20);
+		r2Label.setForeground(Color.WHITE);
+		r2Label.setFont(new Font("HELVETICA", Font.BOLD, 15));
+		
+		
+		r3Label.setBounds(10,150,275,14);
+		r3Field.setBounds(330, 147, 42, 20);
+		r3Label.setForeground(Color.WHITE);
+		r3Label.setFont(new Font("HELVETICA", Font.BOLD, 15));
+		
+		
+		nLabel.setBounds(10,200 ,275,14);
+		nField.setBounds(330, 197, 42, 20); 
+		nLabel.setForeground(Color.WHITE);
+		nLabel.setFont(new Font("HELVETICA", Font.BOLD, 15));
+		
+		
+		mLabel.setBounds(10,250,275,14);
+		mField.setBounds(330, 247, 42, 20);
+		mLabel.setForeground(Color.WHITE);
+		mLabel.setFont(new Font("HELVETICA", Font.BOLD, 15));
+		
+		
+		iterationsLabel.setBounds(10, 300, 275, 14);
+		iterationsField.setBounds(330, 297, 42, 20);
+		iterationsLabel.setForeground(Color.WHITE);
+		iterationsLabel.setFont(new Font("HELVETICA", Font.BOLD, 15));
 		
 		
 		policyLabel.setBounds(10,350,255,14);
+		policyLabel.setForeground(Color.WHITE);
+		policyLabel.setFont(new Font("HELVETICA", Font.BOLD, 15));
 		
 		policyBox.addItem("Random");
 		policyBox.addItem("Best combination");
@@ -85,11 +113,15 @@ public class NewGraphicalInterface {
 		policyBox.setBounds(310, 330, 190, 60); 
 		
 
-		startButton.setBounds(500, 150, 150, 50);
+		startButton.setBounds(475, 150, 200, 100);
+		startButton.setOpaque(false);
+		startButton.setContentAreaFilled(false);
+		startButton.setBorderPainted(false);
 		
-		resultArea.setBounds(10, 425, 760, 270);
+		resultArea.setBounds(10, 425, 760, 80);
 		
-		
+		frame.getContentPane().add(title);
+		frame.getContentPane().add(subTitle);
 		frame.getContentPane().add(policyBox);
 		frame.getContentPane().add(resultArea);
 		frame.getContentPane().add(r1Label);
@@ -105,8 +137,11 @@ public class NewGraphicalInterface {
 		frame.getContentPane().add(iterationsLabel);
 		frame.getContentPane().add(iterationsField); 
 		frame.getContentPane().add(policyLabel);
-		frame.getContentPane().add(startButton);
 		frame.add(messagePopUp);
+		frame.getContentPane().add(startButton);
+		frame.getContentPane().add(bg);
+		
+		
 		
 		frame.setVisible(true);
 		
@@ -155,5 +190,7 @@ public class NewGraphicalInterface {
 	
 	public void setResultMessage(String stringMessage){
 		resultArea.setText(stringMessage);
+		resultArea.setFont(new Font("HELVETICA", Font.BOLD, 15));
+	
 	}
 }

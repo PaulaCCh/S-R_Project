@@ -1,11 +1,11 @@
 package source;
 
 public class StartSimulation {
-private static NewGraphicalInterface gi; 
+private static GraphicalInterface gi; 
 private static Controller controller; 
 
 public static void main(String[] args) {
-	gi=NewGraphicalInterface.getInstance(); 
+	gi=GraphicalInterface.getInstance(); 
 	controller=Controller.getInstance(); 
 	controller.setController(gi);
 }

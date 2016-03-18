@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Controller {
 
-	private NewGraphicalInterface graphicalInt; 
+	private GraphicalInterface graphicalInt; 
 	private SimulationData simData; 
 	private static Controller instance; 
 	private PrintWriter writer;
@@ -27,7 +27,7 @@ public class Controller {
 		return instance; 
 	}
 
-	public void setController(NewGraphicalInterface graphicalInt) {
+	public void setController(GraphicalInterface graphicalInt) {
 		this.graphicalInt=graphicalInt; 
 		this.graphicalInt.addStartButtonListener(new StartListener());
 	}
