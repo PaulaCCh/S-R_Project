@@ -12,7 +12,7 @@ import java.util.Random;
 public class Controller {
 
 	private GraphicalInterface graphicalInt; 
-	private SimulationData simData; 
+	private Data simData; 
 	private static Controller instance; 
 	private PrintWriter writer;
 	ArrayList<Integer> rearrangements;
@@ -73,7 +73,7 @@ public class Controller {
 				n=Integer.parseInt(stringN); 
 				m=Integer.parseInt(stringM); 
 				iterations=Integer.parseInt(stringIterations); 
-				simData=new SimulationData (r1,r2,r3,n,m,n*r1,m*r3,policy); 
+				simData=new Data (r1,r2,r3,n,m,n*r1,m*r3,policy); 
 
 
 				if (!simData.isInputDataCorrect()){
@@ -153,7 +153,8 @@ public class Controller {
 					double averageExecutionTime=getAverageExecutionTime();
 					String result=("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+
 							"\nAverage number of rearrangements: "+averageRearrangements
-							+". Average execution time "+averageExecutionTime+" [ms]\n\n");
+							+"\nAverage execution time "+averageExecutionTime+" [ms]"
+							+ "\nPercentage of rearranged conection over all the connection established: " + Math.round(getAverageNumRearrangements()/Math.min(n*r1, r3*m)*100*100)/100.0+"%\n\n");
 					graphicalInt.setResultMessage(result);
 
 					writer.close();

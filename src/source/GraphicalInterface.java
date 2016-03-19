@@ -107,9 +107,9 @@ public class GraphicalInterface {
 		policyLabel.setForeground(Color.WHITE);
 		policyLabel.setFont(new Font("HELVETICA", Font.BOLD, 15));
 
+		policyBox.addItem("Default");
 		policyBox.addItem("Random");
-		policyBox.addItem("Best combination");
-		policyBox.addItem("Default"); 
+		policyBox.addItem("Best combination"); 
 		policyBox.setBackground(Color.WHITE);
 
 		policyBox.setBounds(310, 330, 190, 60); 
@@ -184,6 +184,7 @@ public class GraphicalInterface {
 	public void setResultMessage(String stringMessage){
 		resultArea.append(stringMessage);
 		resultArea.setFont(new Font("HELVETICA", Font.ITALIC, 15));
+		resultArea.setForeground(Color.RED);
 
 	}
 }

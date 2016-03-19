@@ -37,7 +37,7 @@ public class PaullMatrix {
 	 * @param Slepian-Duguid network parameters
 	 */
 	
-	public PaullMatrix(SimulationData param) {
+	public PaullMatrix(Data param) {
 
 		for (int i = 1; i <= param.getR1(); i++) {
 
@@ -56,10 +56,8 @@ public class PaullMatrix {
 		this.r2 = param.getR2();
 		this.r3 = param.getR3();
 
-		this.maxSymbolsRow = Math.min(param.getNumInletsFirstStage(),
-				param.getR2());
-		this.maxSymbolsColumn = Math.min(param.getR2(),
-				param.getNumOutletsThirdsStage());
+		this.maxSymbolsRow = Math.min(param.getNumInletsFirstStage(), param.getR2());
+		this.maxSymbolsColumn = Math.min(param.getR2(), param.getNumOutletsThirdsStage());
 
 		numRearrangements = new ArrayList<Integer>();
 
@@ -68,17 +66,15 @@ public class PaullMatrix {
 	}
 
 	/**
-	 * Adds a new connection from the first stage matrix row to the third stage
-	 * matrix column. If free second stage matrix are available then a new
-	 * matrix is assigned to the new connection. If no new free matrices are
-	 * available a rearrangement is done
-	 * 
-	 * @param the
-	 *            row and the column index where the new connection has to be
-	 *            deployed.
-	 * @return true if the connections has been routed correctly, false
-	 *         otherwise
-	 * 
+	 * This method add a new connection between the matrices indicated by the two parameter. 
+	 * If there's a free common symbol in row and column, the connection is established through 
+	 * the matrix represented by the symbol. If it's not the case, the method call the 
+	 * reArrange method which performs rearrangements according to the algorithm
+	 *  of the Slepian-Duguid network. 
+	 *  
+	 *  @param row and column of the matrices of the new connection
+	 *  @return true if the adding connection succeeds, false otherwise
+	 *  
 	 */
 	public boolean addNewConnection(int row, int column) {
 
@@ -140,14 +136,14 @@ public class PaullMatrix {
 		// used
 		// in both column and row
 
-		HashSet<Integer> intersection = new HashSet<Integer>(freeSymbolsRow);
-		intersection.retainAll(freeSymbolsColumn);
+		HashSet<Integer> commonSymbols = new HashSet<Integer>(freeSymbolsRow);
+		commonSymbols.retainAll(freeSymbolsColumn);
 
-		if (!intersection.isEmpty()) { 
+		if (!commonSymbols.isEmpty()) { 
 
 			Key k = new Key(row, column);
 			int symbol = 0;
-			for (Integer i : intersection) { //sceglie il primo simbolo di intersection e lo assegna a symbol 
+			for (Integer i : commonSymbols) { //sceglie il primo simbolo di commonSymbols e lo assegna a symbol 
 				symbol = i;
 				break;
 			}
@@ -336,33 +332,28 @@ public class PaullMatrix {
 	}
 
 	/**
-	 * The procedure rearrange a PaullMatrix according to the rules of
-	 * rearrangement.
+	 * Method which performs the rearrangement operations according to the rules of the algorithm. 
+	 * @param: - rowOrColumn indicates if the rearrangement starts from a row (case 0) or a column
+	 * (case 1) - index indicates the index of the row/column from which the alghoritm starts -
+	 * - symbolToLookFor indicates the symbol to look for in the row/column -
+	 * - symbolToAdd indicates the symbol which substitute the symbolToLookFor -
+	 * - numRearrangements indicates the number of rearrangements performed so far -
+	 * - paullMatrix is the hashtable on which rearrangements algorithm is performed -
+	 * - keyToAvoid indicates a cell in the PaullMatrix on which the lookup procedure must
+	 * 	 not be executed. 
 	 * 
-	 * @param - rowOrColum has value 0 if the symbol to be rearranged is
-	 *        searched in the row, 1 in the column - index is the index of the
-	 *        row or column in which the symbol has to be searched -
-	 *        symbolToLookFor is the symbol that has to be searched in order to
-	 *        be exchanged - symbolToAdd is the symbol that replaces the
-	 *        symbolToLookFor - numRearrangements is the number of
-	 *        rearrangements that has been done so far in the rearrangement
-	 *        procedure - paullMatrix is the object of the rearrangement (the
-	 *        object of the class is not used directly in order to allow
-	 *        precomputations of the best rearrangement method - avoid is a key
-	 *        parameter that has to be avoided in the look up procedure
-	 * @return the number of rearrangements needed to arrange the new connection
-	 * 
+	 * @return the number of rearrangemets performed by the alghoritmo to establisg the new connection. 
 	 */
 
 	public int reArrange(int rowOrColumn, int index, int symbolToLookFor,
 			int symbolToAdd, int numRearrangements,
-			Hashtable<Key, Cell> paullMatrix, Key avoid) {
+			Hashtable<Key, Cell> paullMatrix, Key keyToAvoid) {
 
-		int nextRowOrColumn;
-		int nextIndex;
-		int nextSymbolToLookFor;
-		int nextSymbolToAdd;
-		int nextNumRearrangements;
+		int newRowOrColumn;
+		int newIndex;
+		int newSymbolToLook;
+		int newSymbolToAdd;
+		int newNumRearrangements;
 
 		// going through the row
 
@@ -388,13 +379,13 @@ public class PaullMatrix {
 				k = new Key(i, index);
 			}
 
-			if (numRearrangements == 0 && k.hashCode() == avoid.hashCode()) { // avoid:chiave ottenuta da (row, column) di partenza (nuova connessione)
+			if (numRearrangements == 0 && k.hashCode() == keyToAvoid.hashCode()) { // keyToAvoid:chiave ottenuta da (row, column) di partenza (nuova connessione)
 
 				Cell elem = paullMatrix.get(k);
 				elem.insert(symbolToLookFor);
 			}
 
-			if (k.hashCode() != avoid.hashCode()) {
+			if (k.hashCode() != keyToAvoid.hashCode()) {
 				Cell elem = paullMatrix.get(k);
 
 				if (elem.contains(symbolToLookFor)) {
@@ -402,7 +393,7 @@ public class PaullMatrix {
 					elem.remove(symbolToLookFor);
 					elem.insert(symbolToAdd);
 					substituted = true;
-					avoid = k;
+					keyToAvoid = k;
 				}
 			}
 
@@ -418,14 +409,14 @@ public class PaullMatrix {
 			return numRearrangements;
 		} else {
 
-			nextRowOrColumn = 1 - rowOrColumn;
-			nextIndex = i;
-			nextSymbolToLookFor = symbolToAdd;
-			nextSymbolToAdd = symbolToLookFor;
-			nextNumRearrangements = numRearrangements + 1;
+			newRowOrColumn = 1 - rowOrColumn;
+			newIndex = i;
+			newSymbolToLook = symbolToAdd;
+			newSymbolToAdd = symbolToLookFor;
+			newNumRearrangements = numRearrangements + 1;
 
-			return reArrange(nextRowOrColumn, nextIndex, nextSymbolToLookFor,
-					nextSymbolToAdd, nextNumRearrangements, paullMatrix, avoid);
+			return reArrange(newRowOrColumn, newIndex, newSymbolToLook,
+					newSymbolToAdd, newNumRearrangements, paullMatrix, keyToAvoid);
 
 		}
 
@@ -437,7 +428,7 @@ public class PaullMatrix {
 	 * 
 	 * @return average number of rearrangements per new connection required
 	 */
-	public double getAverageNumRearrangements() {
+	public double getAverageNumRearrangements() { //TODO forse non serve
 
 		int count = 0;
 		
@@ -538,18 +529,6 @@ public class PaullMatrix {
 		}
 
 		return paullMatrix;
-
-	}
-
-	/**
-	 * ONLY FOR TEST PURPOSES
-	 * 
-	 */
-	public void setConnection(int row, int column, int symbol) {
-
-		Key k = new Key(row, column);
-		Cell elem = paullMatrix.get(k);
-		elem.insert(symbol);
 
 	}
 

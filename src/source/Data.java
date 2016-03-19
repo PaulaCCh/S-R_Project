@@ -11,7 +11,7 @@
 package source;
 
 
-public class SimulationData {
+public class Data {
 
 	private int r1;
 	private int r2;
@@ -24,7 +24,7 @@ public class SimulationData {
 	
 	private int policy;
 	
-	public SimulationData(int r1, int r2, int r3, int n, int m, int N, int M, int policy) {
+	public Data(int r1, int r2, int r3, int n, int m, int N, int M, int policy) {
 		
 		this.r1=r1;
 		this.r2=r2;
