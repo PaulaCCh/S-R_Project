@@ -15,8 +15,6 @@ public class Controller {
 	private SimulationData simData; 
 	private static Controller instance; 
 	private PrintWriter writer;
-	private PrintWriter averagesWriter;
-	//File file = new File("files/output.dat");
 	ArrayList<Integer> rearrangements;
 	ArrayList<Double> simulationTimes; 
 
@@ -90,13 +88,6 @@ public class Controller {
 						e2.printStackTrace();
 					}
 
-					try {
-						averagesWriter= new PrintWriter (new File ("/Users/ernestodesilva/Desktop/avgValues.txt"));
-					} catch (FileNotFoundException e1) {
-						
-						e1.printStackTrace();
-					}
-
 					rearrangements = new ArrayList<Integer>();
 					simulationTimes = new ArrayList<Double>();
 					double startTime; 
@@ -160,13 +151,13 @@ public class Controller {
 					}
 					double averageRearrangements=getAverageNumRearrangements();//calcola la media di riarrangiamenti su tutte le simulazioni
 					double averageExecutionTime=getAverageExecutionTime();
-					String result=("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+"\nAverage number of rearrangements: "+averageRearrangements+". Average execution time "+averageExecutionTime+"[ms]");
-					//averagesWriter.println("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy());
-					//averagesWriter.println("Average number of rearrangements: "+averageRearrangements+". Average execution time "+averageExecutionTime+"[ms]");
+					String result=("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+
+							"\nAverage number of rearrangements: "+averageRearrangements
+							+". Average execution time "+averageExecutionTime+" [ms]\n\n");
 					graphicalInt.setResultMessage(result);
 
 					writer.close();
-					averagesWriter.close();
+					//averagesWriter.close();
 				}
 			}
 			else 
