@@ -38,8 +38,8 @@ public class Controller {
 			String s1=graphicalInt.getR1(); 
 			String s2=graphicalInt.getR2(); 
 			String s3=graphicalInt.getR3();
-			String stringM=graphicalInt.getM(); 
-			String stringN=graphicalInt.getN();
+			String stringM=graphicalInt.getNumOutlet(); 
+			String stringN=graphicalInt.getNumInlet();
 			String stringIterations=graphicalInt.getIterations(); 
 			int r1=0; 
 			int r2=0; 
@@ -99,7 +99,7 @@ public class Controller {
 						counterSim++;
 						startTime=System.currentTimeMillis(); 
 						PaullMatrix paull=new PaullMatrix(simData); 
-						writer.println(paull.toString());
+						writer.println(paull.matrixToString());
 
 						ArrayList<Integer> totInletArray=new ArrayList<Integer>(); 
 						ArrayList<Integer> totOutletArray=new ArrayList<Integer>(); 
@@ -136,11 +136,10 @@ public class Controller {
 
 							int column=outletAssociatedMatrix.get(randomIndexForM); 
 							outletAssociatedMatrix.remove(randomIndexForM); 
-							//System.out.println("Estabilishing a new connection between inlet "+randomInlet+" of matrix "+row+" and outlet "+randomOutlet+" of matrix "+column);
-							writer.println("Estabilishing a new connection between inlet "+randomInlet+" of matrix "+row+" and outlet "+randomOutlet+" of matrix "+column);
-							paull.addNewConnection(row, column); 
-							writer.println(paull.toString());
-							//System.out.println(paull.toString());
+							writer.println("Establishing a new connection between inlet "+randomInlet+" of matrix "+row+" and outlet "+randomOutlet+" of matrix "+column);
+							paull.addConnection(row, column); 
+							writer.println(paull.matrixToString());
+						
 
 						}
 						rearrangements.add(paull.getTotalRearrangements()); //aggiunge il numero TOTALE di riarrangiamenti della singola simulazione nell'array
@@ -151,7 +150,9 @@ public class Controller {
 					}
 					double averageRearrangements=getAverageNumRearrangements();//calcola la media di riarrangiamenti su tutte le simulazioni
 					double averageExecutionTime=getAverageExecutionTime();
-					String result=("NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+
+					int N=Integer.parseInt(graphicalInt.getNumInlet())*Integer.parseInt(graphicalInt.getR1()); 
+					int M=Integer.parseInt(graphicalInt.getNumOutlet())*Integer.parseInt(graphicalInt.getR3()); 
+					String result=(N+"X"+M+" FC NETWORK. NUMBER OF SIMULATIONS "+iterations+". Policy of rearrangement: "+graphicalInt.getPolicy()+
 							"\nAverage number of rearrangements: "+averageRearrangements
 							+"\nAverage execution time "+averageExecutionTime+" [ms]"
 							+ "\nPercentage of rearranged conection over all the connection established: " + Math.round(getAverageNumRearrangements()/Math.min(n*r1, r3*m)*100*100)/100.0+"%\n\n");
@@ -164,49 +165,51 @@ public class Controller {
 			else 
 				graphicalInt.displayMessage("INPUT DATA NOT CORRECT, PLEASE RETRY!");
 		}
-
-		public double getAverageNumRearrangements() {
-
-			int count = 0;
-
-			double tot = 0;
-
-			for (Integer i : rearrangements) {
-
-				tot = tot + i;
-				count++;
-
-			}
-
-			return tot / count * 1.0;
-		}
-
-		public double getAverageExecutionTime() {
-
-			int count = 0;
-
-			double tot = 0;
-
-			for (Double i : simulationTimes) {
-
-				tot = tot + i;
-				count++;
-
-			}
-
-			return tot / count * 1.0;
-		}
-
-		private boolean isValidFormat(String string){
-			if (string.isEmpty())
-				return false; 
-			for (int i=0; i<string.length(); i++) {
-				char c = string.charAt(i);
-				if (Character.isAlphabetic(c))
-					return false; 
-			}
-			return true; 
-		}
-
+		
 	}
+	
+	
+	private boolean isValidFormat(String string){
+		if (string.isEmpty())
+			return false; 
+		for (int i=0; i<string.length(); i++) {
+			char c = string.charAt(i);
+			if (Character.isAlphabetic(c))
+				return false; 
+		}
+		return true; 
+	}
+
+	public double getAverageNumRearrangements() {
+
+		int count = 0;
+
+		double tot = 0;
+
+		for (Integer i : rearrangements) {
+
+			tot = tot + i;
+			count++;
+
+		}
+
+		return tot / count * 1.0;
+	}
+
+	public double getAverageExecutionTime() {
+
+		int count = 0;
+
+		double tot = 0;
+
+		for (Double i : simulationTimes) {
+
+			tot = tot + i;
+			count++;
+
+		}
+
+		return tot / count * 1.0;
+	}
+	
 }

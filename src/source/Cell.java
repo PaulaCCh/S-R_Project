@@ -106,4 +106,8 @@ public class Cell {
 		
 	}
 	
+	public HashSet<Integer> getActiveConnections(){
+		return this.activeConnections; 
+	}
+	
 }

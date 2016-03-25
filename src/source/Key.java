@@ -63,4 +63,11 @@ public class Key {
 		
 	}
 	
+	public int getR1Index(){ //TODO TEST, DA ELIMINARE
+		return r1Index; 
+	}
+	
+	public int getR2Index(){
+		return r3Index; 
+	}
 }

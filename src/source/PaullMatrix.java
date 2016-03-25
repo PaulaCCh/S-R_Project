@@ -19,17 +19,15 @@ import java.util.Random;
 public class PaullMatrix {
 
 	private Hashtable<Key, Cell> paullMatrix = new Hashtable<Key, Cell>();
-
+	//private int maxSymbolsRow;
+	//private int maxSymbolsColumn;
 	private int r1;
 	private int r2;
 	private int r3;
-
-	private int maxSymbolsRow;
-	private int maxSymbolsColumn;
-
+	private int policy; 
 	private ArrayList<Integer> numRearrangements;
 
-	private int policy;
+	
 
 	/**
 	 * Constructor of the class PaullMatrix
@@ -38,31 +36,22 @@ public class PaullMatrix {
 	 */
 	
 	public PaullMatrix(Data param) {
+		this.r1 = param.getR1();
+		this.r2 = param.getR2();
+		this.r3 = param.getR3();
+		// this.maxSymbolsRow = Math.min(param.getNumInletsFirstStage(), param.getR2());
+		// this.maxSymbolsColumn = Math.min(param.getR2(), param.getNumOutletsThirdsStage());
+		numRearrangements = new ArrayList<Integer>();
+		this.policy = param.getPolicy();
 
 		for (int i = 1; i <= param.getR1(); i++) {
 
 			for (int j = 1; j <= param.getR3(); j++) {
-
-				Key id = new Key(i, j);
 				Cell elem = new Cell();
-
+				Key id = new Key(i, j);
 				paullMatrix.put(id, elem);
-
 			}
-
-		}
-
-		this.r1 = param.getR1();
-		this.r2 = param.getR2();
-		this.r3 = param.getR3();
-
-		this.maxSymbolsRow = Math.min(param.getNumInletsFirstStage(), param.getR2());
-		this.maxSymbolsColumn = Math.min(param.getR2(), param.getNumOutletsThirdsStage());
-
-		numRearrangements = new ArrayList<Integer>();
-
-		this.policy = param.getPolicy();
-
+		}		
 	}
 
 	/**
@@ -76,74 +65,58 @@ public class PaullMatrix {
 	 *  @return true if the adding connection succeeds, false otherwise
 	 *  
 	 */
-	public boolean addNewConnection(int row, int column) {
+	public boolean addConnection(int row, int column) {
 
-		// getting all the non used symbols in the row and column of the Paull
-		// Matrix
+		// getting all the non used symbols in the row and column of the Paull Matrix
 
 		// row
 		HashSet<Integer> freeSymbolsRow = new HashSet<Integer>(); //find free symbols in row
 
-		for (int j = 1; j <= maxSymbolsRow; j++) { //cicla su tutti i simboli distinti che possono apparire in una riga
-
-			int result = 0;
-
+		for (int j = 1; j <= r2; j++) { //MODIFICA: c'era maxSymbolsRow cycle on all possible distinct symbols that can appear in row 
+			
+			int occurences = 0;
+			
 			for (int i = 1; i <= r3; i++) {
-
 				Key k = new Key(row, i); //key made by row of new connection and column i
-
 				Cell el = paullMatrix.get(k); //extracts the element(s) contained in this cell (row,i)
-
 				if (el.contains(j)) {
-
-					result++; 
-
+					occurences++; 
 				}
-
 			}
-
-			if (result == 0) { //se la riga "row" non contiene il simbolo j, esso viene aggiunto al set di simboli free
+			
+			if (occurences == 0) { //if row does NOT contain the symbol j, it's added to the freeSymbolsRow
 				freeSymbolsRow.add(j);
 			}
 		}
 
 		// columns
-		HashSet<Integer> freeSymbolsColumn = new HashSet<Integer>(); //find free symbols in column
-		for (int j = 1; j <= maxSymbolsColumn; j++) {
+		HashSet<Integer> freeSymbolsColumn = new HashSet<Integer>(); 
+		for (int j = 1; j <= r2; j++) { //MODIFICA: c'era maxSymbolsCol 
 
-			int result = 0;
+			int occurences = 0;
 
 			for (int i = 1; i <= r1; i++) {
-
 				Key k = new Key(i, column);
-
 				Cell el = paullMatrix.get(k);
-
 				if (el.contains(j)) {
-
-					result++; //result=occurrences
-
+					occurences++; 
 				}
-
 			}
 
-			if (result == 0) {
+			if (occurences == 0) {
 				freeSymbolsColumn.add(j);
 			}
 		}
 
-		// Option 1, there is a symbol in the row and in the column that is not
-		// used
-		// in both column and row
-
-		HashSet<Integer> commonSymbols = new HashSet<Integer>(freeSymbolsRow);
-		commonSymbols.retainAll(freeSymbolsColumn);
-
-		if (!commonSymbols.isEmpty()) { 
+		HashSet<Integer> commonMissingSymbols = new HashSet<Integer>(freeSymbolsRow);
+		commonMissingSymbols.retainAll(freeSymbolsColumn);
+		
+		// CASE 1: there is at least one symbol missing in the row AND column 
+		if (!commonMissingSymbols.isEmpty()) { 
 
 			Key k = new Key(row, column);
 			int symbol = 0;
-			for (Integer i : commonSymbols) { //sceglie il primo simbolo di commonSymbols e lo assegna a symbol 
+			for (Integer i : commonMissingSymbols) {  
 				symbol = i;
 				break;
 			}
@@ -152,10 +125,12 @@ public class PaullMatrix {
 			return true;
 		}
 
-		// Option 2 there are no free symbols, the matrix needs to be
-		// re-arranged
+		// CASE 2: there are NOT symbols missing in both row and column 
 
 		else {
+			System.out.println("Rearrangement needed for connection between matrices "+row+"-"+column); 
+			System.out.println(matrixToString()); 
+			
 			// finding a symbol in column that is not found in row
 			ArrayList<Integer> columnSymbol = new ArrayList<Integer>();
 
@@ -175,7 +150,7 @@ public class PaullMatrix {
 
 				}
 			}
-
+			
 			// finding a symbol in row that is not found in column
 			ArrayList<Integer> rowSymbol = new ArrayList<Integer>();
 
@@ -196,9 +171,11 @@ public class PaullMatrix {
 			}
 
 			if (rowSymbol.isEmpty() || columnSymbol.isEmpty()) {
+				System.out.println("error");
 				return false;
-			}
-
+				
+			} 
+			
 			Random ran = new Random(); 
 			int indexRowOrColumn;
 			int indexSymbolToLookFor;
@@ -245,11 +222,18 @@ public class PaullMatrix {
 						pointerArrayToLookFor.get(indexSymbolToLookFor), //simbolo da cercare nella riga/colonna
 						pointerArrayToSubstitute.get(indexSymbolToSubstitute), //simbolo che sostituisce il simbolToLookFor 
 						0, paullMatrix, new Key(row, column)));
+				
+				System.out.println("Random symbols for rearrangement: "+pointerArrayToLookFor.get(indexSymbolToLookFor)+", "
+						+pointerArrayToSubstitute.get(indexSymbolToSubstitute));
+				System.out.println("After rearrangement:");  
+				System.out.println(matrixToString()); 
 				break;
 
 			case 2: // selects the combination that guarantees the minimum number of re-arrangements
 				
 				int bestNumRearrangements = 1000000;
+				int bestSym1=0; 
+				int bestSym2=0; 
 				
 				for(indexSelectedSymbolRow=0;indexSelectedSymbolRow<rowSymbol.size();indexSelectedSymbolRow++) {
 					
@@ -268,13 +252,15 @@ public class PaullMatrix {
 								new Key(row, column));
 
 						if (numRearrangementRow < bestNumRearrangements) {
-
+							bestSym1=rowSymbol.get(indexSelectedSymbolRow); 
+							bestSym2=columnSymbol.get(indexSelectedSymbolColumn);
 							best = rowMatrix;
 							bestNumRearrangements=numRearrangementRow;
 								
 						}
 						if (numRearrangementColumn < bestNumRearrangements) {
-
+							bestSym1=rowSymbol.get(indexSelectedSymbolRow); 
+							bestSym2=columnSymbol.get(indexSelectedSymbolColumn);
 							best = columnMatrix;
 							bestNumRearrangements=numRearrangementColumn;
 							
@@ -283,24 +269,31 @@ public class PaullMatrix {
 					}
 					
 				}
-
+				
+				System.out.println("Best couple of symbols for rearrangement: "+bestSym1+", "+bestSym2);
+				System.out.println("After rearrangement:");  
+				
+				
 				paullMatrix=best;
+				System.out.println(matrixToString()); 
 				numRearrangements.add(bestNumRearrangements);
 				
 				
 				break;
 
-			default: // randomly selects symbols, selects the best between row
+			case 3: // randomly selects symbols, selects the best between row
 						// and column
 
 				indexSelectedSymbolRow = ran.nextInt(rowSymbol.size());
-				indexSelectedSymbolColumn = ran.nextInt(columnSymbol.size());
-
+				indexSelectedSymbolColumn = ran.nextInt(columnSymbol.size());			
 
 				rowMatrix = this.duplicateHashTable();
-				columnMatrix = this
-						.duplicateHashTable();
-
+				columnMatrix = this.duplicateHashTable();
+				
+				
+				System.out.println("Symbols for rearrangement: "+rowSymbol.get(indexSelectedSymbolRow)+
+						", "+columnSymbol.get(indexSelectedSymbolColumn));
+				
 				numRearrangementRow = reArrange(0, row,
 						rowSymbol.get(indexSelectedSymbolRow),
 						columnSymbol.get(indexSelectedSymbolColumn), 0,
@@ -311,12 +304,15 @@ public class PaullMatrix {
 						new Key(row, column));
 
 				if (numRearrangementRow <= numRearrangementColumn) {
-
-					paullMatrix = rowMatrix;
+					
+					System.out.println("After rearrangement:");  
+					this.paullMatrix = rowMatrix;
+					System.out.println(matrixToString()); 
 					numRearrangements.add(numRearrangementRow);
 				} else {
-
-					paullMatrix = columnMatrix;
+					System.out.println("After rearrangement:");  
+					this.paullMatrix = columnMatrix; 
+					System.out.println(matrixToString());
 					numRearrangements.add(numRearrangementColumn);
 
 				}
@@ -369,7 +365,12 @@ public class PaullMatrix {
 
 			bound = r1;
 		}
-
+		if (numRearrangements == 0 ) { 
+			
+			Cell elem = paullMatrix.get(keyToAvoid);  
+			elem.insert(symbolToLookFor);
+			}
+		
 		while (!substituted && i <= bound) {
 
 			Key k;
@@ -379,17 +380,10 @@ public class PaullMatrix {
 				k = new Key(i, index);
 			}
 
-			if (numRearrangements == 0 && k.hashCode() == keyToAvoid.hashCode()) { // keyToAvoid:chiave ottenuta da (row, column) di partenza (nuova connessione)
-
-				Cell elem = paullMatrix.get(k);
-				elem.insert(symbolToLookFor);
-			}
-
 			if (k.hashCode() != keyToAvoid.hashCode()) {
 				Cell elem = paullMatrix.get(k);
 
 				if (elem.contains(symbolToLookFor)) {
-
 					elem.remove(symbolToLookFor);
 					elem.insert(symbolToAdd);
 					substituted = true;
@@ -428,20 +422,7 @@ public class PaullMatrix {
 	 * 
 	 * @return average number of rearrangements per new connection required
 	 */
-	public double getAverageNumRearrangements() { //TODO forse non serve
-
-		int count = 0;
-		
-		int tot = 0;
-		for (Integer i : numRearrangements) {
-
-			tot = tot + i;
-			count++;
-
-		}
-
-		return tot / count * 1.0;
-	}
+	
 	
 	public int getTotalRearrangements() {
 		
@@ -453,6 +434,39 @@ public class PaullMatrix {
 		return total;
 	}
 
+
+
+
+	
+	/**
+	 * It duplicates the Hashtable of the current element by creating a new hash
+	 * table that is disjoint from the current.
+	 * 
+	 * @return a Hashtable, exact copy element by element of the current Hashtable
+	 * 
+	 */
+	public Hashtable<Key, Cell> duplicateHashTable() {
+
+		Hashtable<Key, Cell> paullMatrix = new Hashtable<Key, Cell>();
+
+		for (int i = 1; i <= r1; i++) {
+
+			for (int j = 1; j <= r3; j++) {
+
+				Key id = new Key(i, j);
+				Cell elem = this.paullMatrix.get(id).clone();
+
+				paullMatrix.put(id, elem);
+
+			}
+
+		}
+
+		return paullMatrix;
+
+	}
+	
+	
 	/**
 	 * Returns a string representation of the Paull Matrix for representation
 	 * purposes
@@ -461,8 +475,7 @@ public class PaullMatrix {
 	 *         Matrix
 	 * 
 	 */
-	public String toString() {
-
+	public String matrixToString(){
 		String[] line = new String[r1];
 
 		int longest = 0;
@@ -500,36 +513,7 @@ public class PaullMatrix {
 		}
 
 		return result;
-
-	}
-
-	
-	/**
-	 * It duplicates the Hashtable of the current element by creating a new hash
-	 * table that is disjoint from the current.
-	 * 
-	 * @return a Hashtable, exact copy element by element of the current Hashtable
-	 * 
-	 */
-	public Hashtable<Key, Cell> duplicateHashTable() {
-
-		Hashtable<Key, Cell> paullMatrix = new Hashtable<Key, Cell>();
-
-		for (int i = 1; i <= r1; i++) {
-
-			for (int j = 1; j <= r3; j++) {
-
-				Key id = new Key(i, j);
-				Cell elem = this.paullMatrix.get(id).clone();
-
-				paullMatrix.put(id, elem);
-
-			}
-
-		}
-
-		return paullMatrix;
-
+		
 	}
 
 }

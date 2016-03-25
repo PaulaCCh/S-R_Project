@@ -12,28 +12,29 @@ package source;
 
 
 public class Data {
-
-	private int r1;
-	private int r2;
-	private int r3;
-	
 	private int n;
 	private int m;
 	private int N;
 	private int M;
-	
 	private int policy;
+	private int r1;
+	private int r2;
+	private int r3;
+	
+	
+	
 	
 	public Data(int r1, int r2, int r3, int n, int m, int N, int M, int policy) {
 		
-		this.r1=r1;
-		this.r2=r2;
-		this.r3=r3;
 		this.n = n;
 		this.m = m;
 		this.N = N;
 		this.M = M;
 		this.policy = policy;
+		this.r1=r1;
+		this.r2=r2;
+		this.r3=r3;
+		
 	}
 	
 	
@@ -44,24 +45,24 @@ public class Data {
 			return false;
 		
 		}
-		if(policy < 0) {
-			
-			return false;
-		
-		}
 		
 		if(r2 < Math.max(n, m)) {
 			
 			return false;
 			
 		}
+		if(policy < 0) {
+			
+			return false;
 		
-		if(n*r1 != N) {
+		}
+		
+		if(n*r1 != N) { //TODO forse non necessario 
 			
 			return false;
 		}
 		
-		if(r3*m != M) {
+		if(r3*m != M) { //TODO forse non necessario 
 			
 			return false;
 		
@@ -77,7 +78,6 @@ public class Data {
 		
 	}
 	
-
 	
 	public int getR1() {
 		

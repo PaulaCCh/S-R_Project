@@ -17,14 +17,14 @@ import javax.swing.JTextField;
 public class GraphicalInterface {
 
 	private static GraphicalInterface instance; 
-	private JFrame frame=new JFrame ("Slepian-Duguid Simulator "); 
+	private JFrame frame=new JFrame ("Slepian-Duguid Simulator ORIGINAL "); 
 	private JLabel r1Label=new JLabel ("Number of matrices in the first stage"); 
 	private JLabel r2Label=new JLabel ("Number of matrices in the second stage"); 
 	private JLabel r3Label=new JLabel ("Number of matrices in the third stage");  
-	private JLabel nLabel=new JLabel ("Number of inlet of each matrix"); 
-	private JLabel mLabel=new JLabel ("Number of outlet of each matrix"); 
+	private JLabel nLabel=new JLabel ("Number of inlets of each matrix"); 
+	private JLabel mLabel=new JLabel ("Number of outlets of each matrix"); 
 	private JLabel policyLabel=new JLabel ("Select policy");
-	private JLabel iterationsLabel=new JLabel("Insert the number of simulation");
+	private JLabel iterationsLabel=new JLabel("Insert the number of simulations");
 	private JLabel bg=new JLabel (new ImageIcon("images/background.jpg"));
 	private JLabel title=new JLabel("SLEPIAN-DUGUID"); 
 	private JLabel subTitle=new JLabel("SIMULATOR");
@@ -157,11 +157,11 @@ public class GraphicalInterface {
 		return (r3Field.getText()); 
 	}
 
-	public String getN(){
+	public String getNumInlet(){
 		return (nField.getText());
 	}
 
-	public String getM(){
+	public String getNumOutlet(){
 		return (mField.getText()); 
 	}
 
