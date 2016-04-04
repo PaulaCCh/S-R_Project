@@ -8,7 +8,7 @@
  *
  */
 
-package source;
+package slepianDuguidSim;
 
 
 public class Data {

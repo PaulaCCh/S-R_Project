@@ -1,4 +1,11 @@
-package source;
+/**
+ * VIEW OF THE MVC DESIGN PATTERN
+ * The matrix class contains all the elements of the graphics interface.
+ * 
+ * @author De Silva, Pébrier, Caballero 
+ *
+ */
+package slepianDuguidSim;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,12 +24,12 @@ import javax.swing.JTextField;
 public class GraphicalInterface {
 
 	private static GraphicalInterface instance; 
-	private JFrame frame=new JFrame ("Slepian-Duguid Simulator ORIGINAL "); 
-	private JLabel r1Label=new JLabel ("Number of matrices in the first stage"); 
-	private JLabel r2Label=new JLabel ("Number of matrices in the second stage"); 
-	private JLabel r3Label=new JLabel ("Number of matrices in the third stage");  
-	private JLabel nLabel=new JLabel ("Number of inlets of each matrix"); 
-	private JLabel mLabel=new JLabel ("Number of outlets of each matrix"); 
+	private JFrame frame=new JFrame ("Slepian-Duguid Simulator"); 
+	private JLabel r1Label=new JLabel ("Number of matrices in the first stage (r1)"); 
+	private JLabel r2Label=new JLabel ("Number of matrices in the second stage (r2)"); 
+	private JLabel r3Label=new JLabel ("Number of matrices in the third stage (r3)");  
+	private JLabel nLabel=new JLabel ("Number of inlets of each matrix (n)"); 
+	private JLabel mLabel=new JLabel ("Number of outlets of each matrix (m)"); 
 	private JLabel policyLabel=new JLabel ("Select policy");
 	private JLabel iterationsLabel=new JLabel("Insert the number of simulations");
 	private JLabel bg=new JLabel (new ImageIcon("images/background.jpg"));
@@ -67,20 +74,18 @@ public class GraphicalInterface {
 		subTitle.setFont(new Font("HELVETICA", Font.ITALIC+Font.BOLD, 25));
 		subTitle.setForeground(Color.WHITE);
 
-		r1Label.setBounds(10,50,275,14);
+		r1Label.setBounds(10,50,290,14);
 		r1Label.setForeground(Color.WHITE);
 		r1Label.setFont(new Font("HELVETICA", Font.BOLD, 15));
 		r1Field.setBounds( 330, 47, 42, 20);
 
-
-
-		r2Label.setBounds(10,100,285,14);
+		r2Label.setBounds(10,100,308,14);
 		r2Field.setBounds(330, 97, 42, 20);
 		r2Label.setForeground(Color.WHITE);
 		r2Label.setFont(new Font("HELVETICA", Font.BOLD, 15));
 
 
-		r3Label.setBounds(10,150,275,14);
+		r3Label.setBounds(10,150,290,14);
 		r3Field.setBounds(330, 147, 42, 20);
 		r3Label.setForeground(Color.WHITE);
 		r3Label.setFont(new Font("HELVETICA", Font.BOLD, 15));

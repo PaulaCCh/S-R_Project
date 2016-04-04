@@ -1,4 +1,4 @@
-package source;
+package slepianDuguidSim;
 
 public class StartSimulation {
 private static GraphicalInterface gi; 

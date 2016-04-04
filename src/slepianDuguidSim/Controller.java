@@ -1,4 +1,11 @@
-package source;
+/**
+ * CONTROLLER OF THE MVC DESIGN PATTERN
+ * This class accepts input data from the view, convert them to commands for the model 
+ * and consequently update the view displaying results.
+ * 
+ * @author De Silva, Pébrier, Caballero 
+ *
+ */package slepianDuguidSim;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,7 +72,7 @@ public class Controller {
 
 
 			if ( (isValidFormat(s1)) && (isValidFormat(s2)) && (isValidFormat(s3)) && (isValidFormat(stringN)) && (isValidFormat(stringM)) && (isValidFormat(stringIterations))) {
-				//se non vuote e numeriche 
+				//if not empty and numeric
 
 				r1=Integer.parseInt(s1); 
 				r2=Integer.parseInt(s2); 
@@ -96,59 +103,62 @@ public class Controller {
 					int counterSim=1; 
 					while (counterSim<=iterations){
 						writer.print("SIMULATION " + counterSim +"\n");
+						System.out.println("------------------------New simulation------------------------");
 						counterSim++;
 						startTime=System.currentTimeMillis(); 
-						PaullMatrix paull=new PaullMatrix(simData); 
+						Matrix paull=new Matrix(simData); 
 						writer.println(paull.matrixToString());
 
 						ArrayList<Integer> totInletArray=new ArrayList<Integer>(); 
 						ArrayList<Integer> totOutletArray=new ArrayList<Integer>(); 
 						ArrayList<Integer> inletAssociatedMatrix=new ArrayList<Integer>(); 
 						ArrayList<Integer> outletAssociatedMatrix=new ArrayList<Integer>();
+						
 						for(int j=1;j<=n*r1;j++) {		
 							totInletArray.add(j);
 							inletAssociatedMatrix.add((int) j/n +1);
 						}
+						
 						inletAssociatedMatrix.add(0, 1);
 						inletAssociatedMatrix.remove(inletAssociatedMatrix.size()-1); 
 
 						for(int j=1;j<=m*r3;j++) {
-
 							totOutletArray.add(j);
 							outletAssociatedMatrix.add((int) j/m+1);
 						}
+						
 						outletAssociatedMatrix.add(0, 1);
 						outletAssociatedMatrix.remove(outletAssociatedMatrix.size()-1);
 
-						while (totInletArray.size()!=0 && totOutletArray.size()!=0) { //starts 1 of the iterations
+						while (totInletArray.size()!=0 && totOutletArray.size()!=0) { //start of simulation
 							Random ran=new Random(); 
 
 							int randomIndexForN=ran.nextInt(totInletArray.size());
 							int randomInlet=totInletArray.get(randomIndexForN); 
 							totInletArray.remove(randomIndexForN); 
 
-							int row=inletAssociatedMatrix.get(randomIndexForN); 
+							int rowMatrix=inletAssociatedMatrix.get(randomIndexForN); 
 							inletAssociatedMatrix.remove(randomIndexForN); 
 
 							int randomIndexForM=ran.nextInt(totOutletArray.size());
 							int randomOutlet=totOutletArray.get(randomIndexForM); 
 							totOutletArray.remove(randomIndexForM); 
 
-							int column=outletAssociatedMatrix.get(randomIndexForM); 
+							int columnMatrix=outletAssociatedMatrix.get(randomIndexForM); 
 							outletAssociatedMatrix.remove(randomIndexForM); 
-							writer.println("Establishing a new connection between inlet "+randomInlet+" of matrix "+row+" and outlet "+randomOutlet+" of matrix "+column);
-							paull.addConnection(row, column); 
+							writer.println("Establishing a new connection between inlet "+randomInlet+" of matrix "+rowMatrix+" and outlet "+randomOutlet+" of matrix "+columnMatrix);
+							paull.establishConnection(rowMatrix, columnMatrix); 
 							writer.println(paull.matrixToString());
-						
+
 
 						}
-						rearrangements.add(paull.getTotalRearrangements()); //aggiunge il numero TOTALE di riarrangiamenti della singola simulazione nell'array
+						rearrangements.add(paull.getTotalRearrangements()); //add the number of rearrangemets of the simulation to the array
 						finishTime=System.currentTimeMillis(); 
 						double executionTime=finishTime-startTime; 
 						simulationTimes.add(executionTime); 
 
 					}
-					double averageRearrangements=getAverageNumRearrangements();//calcola la media di riarrangiamenti su tutte le simulazioni
+					double averageRearrangements=getAverageNumRearrangements(); //AVG of all rearrangements of all simulations
 					double averageExecutionTime=getAverageExecutionTime();
 					int N=Integer.parseInt(graphicalInt.getNumInlet())*Integer.parseInt(graphicalInt.getR1()); 
 					int M=Integer.parseInt(graphicalInt.getNumOutlet())*Integer.parseInt(graphicalInt.getR3()); 
@@ -159,16 +169,15 @@ public class Controller {
 					graphicalInt.setResultMessage(result);
 
 					writer.close();
-					//averagesWriter.close();
 				}
 			}
 			else 
 				graphicalInt.displayMessage("INPUT DATA NOT CORRECT, PLEASE RETRY!");
 		}
-		
+
 	}
-	
-	
+
+
 	private boolean isValidFormat(String string){
 		if (string.isEmpty())
 			return false; 
@@ -211,5 +220,5 @@ public class Controller {
 
 		return tot / count * 1.0;
 	}
-	
+
 }
